@@ -1,11 +1,11 @@
-import { Button, Col, Form, Input, Row, Select, Space, Table, TablePaginationConfig } from "antd";
+import { Button, Col, Form, Input, Row, Select, Space, Table, TablePaginationConfig, Tooltip } from "antd";
 import router, { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import styles from "/index.module.css"
-
-
+import Image from "next/image";
+import dayjs from "dayjs";
 
 const dataSource = [
   {
@@ -27,36 +27,59 @@ const COLUMNS = [
     title: "名称",
     dataIndex: "name",
     key: "name",
+    width: 200,
   },
   {
     title: "封面",
     dataIndex: "cover",
     key: "cover",
+    width: 120,
+    render: (text: string)=>{
+      return<Image
+        width={80}
+        src={text}
+        alt=""
+        />
+    }
   },
   {
     title: "作者",
     dataIndex: "author",
     key: "author",
+    width: 120,
   },
   {
     title: "分类",
     dataIndex: "category",
     key: "category",
+    width: 80,
   },
   {
     title: "描述",
     dataIndex: "description",
     key: "description",
+    ellipsis: true,
+    width: 200,
+    render: (text: string)=>{
+      return <Tooltip title={text} placement={"topLeft"}>
+        {text}
+      </Tooltip>
+    }
   },
   {
     title: "库存",
     dataIndex: "stock",
     key: "stock",
+    width: 80,
   },
   {
     title: "创建时间",
     dataIndex: "creatAt",
     key: "creatAt",
+    width: 130,
+    render: (text: string) => {
+      dayjs(text).format("YYYY-MM-DD");
+    },
   },
 ];
 
@@ -70,6 +93,12 @@ export default function Home() {
     showSizeChanger: true,
     total: 0,
   });
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data } = await axios.get()
+    }
+
   const handleSearchFinish = (value) => {
     console.log(value);
   };
