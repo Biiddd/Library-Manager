@@ -6,3 +6,4 @@ export async Function getBookList(params?: BookQueryTtpe) {
 
 export async function bookAdd(params: BookType) {
   return request.post(`/api/books`, params);
+}

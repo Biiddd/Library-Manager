@@ -98,6 +98,8 @@ export function Layout({ children }: { children: ReactNode }) {
     router.push(key);
   };
 
+  const activeMenu = router.pathname;
+
   return (
     <AntdLayout>
       <Header className={styles.header}>
@@ -126,6 +128,7 @@ export function Layout({ children }: { children: ReactNode }) {
             mode="inline"
             defaultSelectedKeys={["/book"]}
             defaultOpenKeys={["book"]}
+            selectedKeys={[activeMenu]}
             style={{ height: "100%" }}
             items={ITEM}
             onClick={handleMenuClick}

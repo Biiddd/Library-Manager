@@ -1,76 +1,43 @@
+import {getCategoryList} from "@/api/category";
+import content from "@/components/Content"
+//default test
+
 import { Button, Col, Form, Input, Row, Select, Space, Table, TablePaginationConfig, Tooltip } from "antd";
 import router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import styles from "/index.module.css"
+import styles from "/index.module.css";
 import Image from "next/image";
 import dayjs from "dayjs";
 
-const dataSource = [
-  {
-    key: "1",
-    name: "胡彦斌",
-    age: 32,
-    address: "西湖区湖底公园1号",
-  },
-  {
-    key: "2",
-    name: "胡彦祖",
-    age: 42,
-    address: "西湖区湖底公园1号",
-  },
-];
+import styles from "./index.module.css"
 
 const COLUMNS = [
   {
     title: "名称",
     dataIndex: "name",
     key: "name",
-    width: 200,
+    width: 200
   },
   {
-    title: "封面",
+    title: "级别",
     dataIndex: "cover",
     key: "cover",
     width: 120,
-    render: (text: string)=>{
-      return<Image
+    render: (text: string) => {
+      return <Image
         width={80}
         src={text}
         alt=""
-        />
+      />;
     }
   },
   {
-    title: "作者",
+    title: "所属分类",
     dataIndex: "author",
     key: "author",
-    width: 120,
-  },
-  {
-    title: "分类",
-    dataIndex: "category",
-    key: "category",
-    width: 80,
-  },
-  {
-    title: "描述",
-    dataIndex: "description",
-    key: "description",
-    ellipsis: true,
-    width: 200,
-    render: (text: string)=>{
-      return <Tooltip title={text} placement={"topLeft"}>
-        {text}
-      </Tooltip>
-    }
-  },
-  {
-    title: "库存",
-    dataIndex: "stock",
-    key: "stock",
-    width: 80,
+    width: 120
   },
   {
     title: "创建时间",
@@ -79,54 +46,56 @@ const COLUMNS = [
     width: 130,
     render: (text: string) => {
       dayjs(text).format("YYYY-MM-DD");
-    },
-  },
+    }
+  }
 ];
 
-export default function Home() {
-  const [total, setTotal] = useState(0);
+export default function Category() {
   const [form] = Form.useForm();
   const router = useRouter();
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
     showSizeChanger: true,
-    total: 0,
+    total: 0
   });
 
   useEffect(() => {
     async function fetchData() {
-      const { data } = await axios.get()
+      const { data } = await axios.get();
     }
 
-  const handleSearchFinish = (value) => {
-    console.log(value);
-  };
-  const handleSearchReset = () => {
-    console.log("重置");
-    form.resetFields();
-  };
+    const handleSearchFinish = (value) => {
+      console.log(value);
+    };
+    const handleSearchReset = () => {
+      console.log("重置");
+      form.resetFields();
+    };
 
-  const handleBookEdit = () => {
-    console.log("编辑");
-    router.push("/book/edit/id");
-  };
+    const handleBookEdit = () => {
+      console.log("编辑");
+      router.push("/book/edit/id");
+    };
 
-  const handleTableChange = (pagination: TablePaginationConfig) => {
-    setPagination(pagination);
-  };
+    const handleTableChange = (pagination: TablePaginationConfig) => {
+      setPagination(pagination);
+    };
 
-  const columns = [...COLUMNS,
-    {
-      title: "操作", key: "action", render: (:any, row:any) =>
-  {
-    return <>
-      <Button type="link" onClick={handleBookEdit}>编辑</Button>
-      <Button type="link" danger>删除</Button>
-    </>
-  }
-}
-]
+    const columns = [...COLUMNS,
+      {
+        title: "操作",
+        key: "action",
+        render: (_: any, row: any) => (
+          <Space>
+            <Button type="link" onClick={handleBookEdit}>
+              编辑</Button>
+            <Button type="link" danger>删除</Button>
+          </Space>
+        )
+      }
+    ]
+  ;
 
   return (
     <>
@@ -157,7 +126,7 @@ export default function Home() {
                   { value: "jack", label: "Jack" },
                   { value: "lucy", label: "Lucy" },
                   { value: "Yiminghe", label: "yiminghe" },
-                  { value: "disabled", label: "Disabled" },
+                  { value: "disabled", label: "Disabled" }
                 ]}
               />
             </Form.Item>
@@ -178,19 +147,18 @@ export default function Home() {
           </Col>
         </Row>
       </Form>
-
-<div className={styles.tableWrap}>
-      <Table dataSource={dataSource}
-             columns={columns}
-             scroll={{ x: 1000 }}
-             onChange={handleTableChange}
-             pagination={{
-               ...pagination,
-               total:total,
-               showTotal: () => `共 ${pagination.total} 条记录`,
-             }}
-      />
-</div>
+      <div className={styles.tableWrap}>
+        <Table dataSource={dataSource}
+               columns={columns}
+               scroll={{ x: 1000 }}
+               onChange={handleTableChange}
+               pagination={{
+                 ...pagination,
+                 total: total,
+                 showTotal: () => `共 ${pagination.total} 条记录`
+               }}
+        />
+      </div>
     </>
 
   );
