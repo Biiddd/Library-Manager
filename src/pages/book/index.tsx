@@ -1,11 +1,12 @@
 import { Button, Col, Form, Input, Row, Select, Space, Table, TablePaginationConfig, Tooltip } from "antd";
 import router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 import styles from "/index.module.css"
 import Image from "next/image";
 import dayjs from "dayjs";
+import { getBookList } from "@/api/book";
+import { BookQueryType } from "@/types";
 
 const dataSource = [
   {
@@ -87,7 +88,7 @@ export default function Home() {
   const [total, setTotal] = useState(0);
   const [form] = Form.useForm();
   const router = useRouter();
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
     pageSize: 10,
     showSizeChanger: true,
@@ -96,12 +97,21 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchData() {
-      const { data } = await axios.get()
+      const res = await getBookList({ current: 1, pageSize: pagination.pageSize })
+      const { data } = res
+      setData(data)
     }
 
-    const handleSearchFinish = (value) => {
-      console.log(value);
+    fetchData()
+  }, [])
+
+
+    const handleSearchFinish = async (values:BookQueryType) => {
+      const res =await getBookList(...values, current: 1, pageSize: pagination.pageSize)
+      setData(res.data)
+      setPagination(...pagination, current: 1, total: res.total)
     };
+
     const handleSearchReset = () => {
       console.log("重置");
       form.resetFields();
@@ -113,7 +123,13 @@ export default function Home() {
     };
 
     const handleTableChange = (pagination: TablePaginationConfig) => {
-      setPagination(pagination);
+      setPagination(pagination)
+      const query = form.getFieldsValue()
+      getBookList({
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+        ...query
+    })
     };
 
     const columns = [...COLUMNS,
@@ -185,7 +201,6 @@ export default function Home() {
                  onChange={handleTableChange}
                  pagination={{
                    ...pagination,
-                   total: total,
                    showTotal: () => `共 ${pagination.total} 条记录`,
                  }}
           />

@@ -9,12 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/qs": "^6.9.11",
     "antd": "^5.12.2",
     "axios": "^1.6.2",
     "dayjs": "^1.11.10",
     "next": "14.0.4",
     "prettier": "^3.1.1",
-    "qs": "^6.11.2",
     "react": "^18",
     "react-dom": "^18",
     "utils": "^0.3.1"
