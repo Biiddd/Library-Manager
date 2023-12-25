@@ -99,99 +99,97 @@ export default function Home() {
       const { data } = await axios.get()
     }
 
-  const handleSearchFinish = (value) => {
-    console.log(value);
-  };
-  const handleSearchReset = () => {
-    console.log("重置");
-    form.resetFields();
-  };
+    const handleSearchFinish = (value) => {
+      console.log(value);
+    };
+    const handleSearchReset = () => {
+      console.log("重置");
+      form.resetFields();
+    };
 
-  const handleBookEdit = () => {
-    console.log("编辑");
-    router.push("/book/edit/id");
-  };
+    const handleBookEdit = () => {
+      console.log("编辑");
+      router.push("/book/edit/id");
+    };
 
-  const handleTableChange = (pagination: TablePaginationConfig) => {
-    setPagination(pagination);
-  };
+    const handleTableChange = (pagination: TablePaginationConfig) => {
+      setPagination(pagination);
+    };
 
-  const columns = [...COLUMNS,
-    {
-      title: "操作", key: "action", render: (:any, row:any) =>
-  {
-    return <>
-      <Button type="link" onClick={handleBookEdit}>编辑</Button>
-      <Button type="link" danger>删除</Button>
-    </>
+    const columns = [...COLUMNS,
+      {
+        title: "操作", key: "action", render: (_: any, row: any) => {
+          return <>
+            <Button type="link" onClick={handleBookEdit}>编辑</Button>
+            <Button type="link" danger>删除</Button>
+          </>
+        }
+      }
+    ]
+
+    return (
+      <>
+        <Form
+          name="search"
+          form={form}
+          layout="inline"
+          onFinish={handleSearchFinish}
+          initialValues={{ name: " ", author: " ", category: " " }}
+        >
+          <Row gutter={24}>
+            <Col span={5}>
+              <Form.Item name="name" label="名称">
+                <Input placeholder="请输入" allowClear />
+              </Form.Item>
+            </Col>
+            <Col span={5}>
+              <Form.Item name="author" label="作者">
+                <Input placeholder="请输入" allowClear />
+              </Form.Item>
+            </Col>
+            <Col span={5}>
+              <Form.Item name="category" label="分类">
+                <Select
+                  allowClear
+                  showSearch
+                  options={[
+                    { value: "jack", label: "Jack" },
+                    { value: "lucy", label: "Lucy" },
+                    { value: "Yiminghe", label: "yiminghe" },
+                    { value: "disabled", label: "Disabled" },
+                  ]}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={9}>
+              <Form.Item>
+                <Space>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={handleSearchReset}
+                  >
+                    搜索
+                  </Button>
+                  <Button htmlType="submit">清空</Button>
+                </Space>
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+
+        <div className={styles.tableWrap}>
+          <Table dataSource={dataSource}
+                 columns={columns}
+                 scroll={{ x: 1000 }}
+                 onChange={handleTableChange}
+                 pagination={{
+                   ...pagination,
+                   total: total,
+                   showTotal: () => `共 ${pagination.total} 条记录`,
+                 }}
+          />
+        </div>
+      </>
+    );
   }
-}
-]
-
-  return (
-    <>
-      <Form
-        name="search"
-        form={form}
-        layout="inline"
-        onFinish={handleSearchFinish}
-        initialValues={{ name: " ", author: " ", category: " " }}
-      >
-        <Row gutter={24}>
-          <Col span={5}>
-            <Form.Item name="name" label="名称">
-              <Input placeholder="请输入" allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={5}>
-            <Form.Item name="author" label="作者">
-              <Input placeholder="请输入" allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={5}>
-            <Form.Item name="category" label="分类">
-              <Select
-                allowClear
-                showSearch
-                options={[
-                  { value: "jack", label: "Jack" },
-                  { value: "lucy", label: "Lucy" },
-                  { value: "Yiminghe", label: "yiminghe" },
-                  { value: "disabled", label: "Disabled" },
-                ]}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={9}>
-            <Form.Item>
-              <Space>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={handleSearchReset}
-                >
-                  搜索
-                </Button>
-                <Button htmlType="submit">清空</Button>
-              </Space>
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
-
-<div className={styles.tableWrap}>
-      <Table dataSource={dataSource}
-             columns={columns}
-             scroll={{ x: 1000 }}
-             onChange={handleTableChange}
-             pagination={{
-               ...pagination,
-               total:total,
-               showTotal: () => `共 ${pagination.total} 条记录`,
-             }}
-      />
-</div>
-    </>
-
-  );
-}

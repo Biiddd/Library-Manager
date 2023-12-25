@@ -11,7 +11,6 @@ import styles from "/index.module.css";
 import Image from "next/image";
 import dayjs from "dayjs";
 
-import styles from "./index.module.css"
 
 const COLUMNS = [
   {
